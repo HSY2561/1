@@ -1,38 +1,39 @@
-# Pavement Crack Repair Robot Research
+# 裂缝识别与机器人修复实验
 
-This collaboration branch contains reproducible source code, training configurations, experiment logs, reports, and paper planning material for the pavement-crack segmentation and robot repair project.
+本仓库记录 Crack500 视觉分割、四轮差速底盘循迹和三自由度定点修复项目的可复现实验材料。训练和测试在服务器 `/hy-tmp/crack_project` 执行；数据集、权重、环境目录和大型日志不上传。
 
-## Current status
+## 当前结论（2026-09-23）
 
-- Primary segmentation baseline: PaddleSeg official BiSeNetV2 + CrossEntropyLoss.
-- Best BiSeNetV2 ablation so far: OHEM Cross Entropy + DiceLoss + EMA.
-- Best unified Crack500 public comparison currently recorded: OCRNet-HRNet-W18, mIoU 0.7760.
-- The optimized BiSeNetV2 reaches mIoU 0.7694 on the current test protocol; it must not be described as public-literature SOTA without further evidence.
-- Robot work is planned around four-wheel differential-drive coarse tracking, camera/robot calibration, pixel-to-physical conversion, and three-DOF Cartesian fine positioning for repair.
+- 工程消融基线：PaddleSeg 官方 **BiSeNetV2 + CrossEntropyLoss**。
+- BiSeNetV2 当前最佳消融候选：**OHEM CE + DiceLoss + EMA**。
+- 已核验测试最高模型：**OCRNet-HRNet-W18，mIoU 0.7760**。
+- BiSeNetV2+OHEM+Dice+EMA：mIoU **0.7694**。
+- 当前没有 SOTA 证据；公开论文数字因划分和协议不同，不能直接排名。
+- SCSegamba 官方训练正在服务器运行；中途 checkpoint9 的统一 test mIoU 为 0.758827，尚未超过 OCRNet 或 BiSeNetV2 最佳消融；MixerCSeg 暂受 CUDA 扩展编译环境阻塞。
 
-## Repository layout
+## 已核验测试表
 
-- `external/PaddleSeg-v2.10.0/`: selected official PaddleSeg source, configs, and tools.
-- `external/PIDNet/`: selected official PIDNet source and configs.
-- `PaddleSeg-release-2.8/`: project-side crack segmentation model code and Crack500 split lists.
-- `experiments/crack500_baseline/`: training configs, logs, and audit notes. Checkpoints are intentionally excluded.
-- `analysis/` and `refine-logs/`: planning, analysis, and experiment tracking documents.
-- `PAPER_PLAN.md`, `基线模型选择报告.md`, `模型消融文档.md`: current paper and model reports.
+| 模型 | mIoU | 裂缝 IoU | 裂缝 Precision | 裂缝 Recall | 裂缝前景 F1 |
+|---|---:|---:|---:|---:|---:|
+| BiSeNetV2 + CE | 0.7606 | 0.5545 | 0.7146 | 0.7122 | 0.7134 |
+| BiSeNetV2 + OHEM + Dice + EMA | 0.7694 | 0.5705 | 0.7296 | 0.7233 | 0.7264 |
+| PP-LiteSeg-STDC1 | 0.7661 | 0.5634 | 0.7527 | 0.6915 | 0.7219 |
+| OCRNet-HRNet-W18 | **0.7760** | **0.5819** | **0.7601** | 0.7128 | **0.7356** |
+| DeepLabV3P-ResNet50 | 0.7257 | 0.4955 | 0.5995 | **0.7406** | 0.6619 |
+| SegFormer-B0 | 0.7570 | 0.5466 | 0.7388 | 0.6776 | 0.7069 |
+| PIDNet-S | 0.5005 | 0.0547 | 0.8036 | 0.0554 | 0.1036 |
 
-## Reproducing experiments
+## 目录
 
-1. Install PaddlePaddle for the target CUDA version and Python 3.10.
-2. Obtain Crack500 separately; raw images and masks are excluded from Git.
-3. Place the dataset according to the paths in the selected YAML configuration, or update the dataset root locally.
-4. Run the official PaddleSeg `tools/train.py` and `tools/val.py` commands using the configs under `experiments/crack500_baseline/configs/`.
-5. Record checkpoints and generated outputs outside this repository. Do not commit them.
+- `基线模型选择报告.md`：基线和公开模型选择依据。
+- `模型消融文档.md`：消融结果、失败原因和 SOTA 验收门槛。
+- `COLLABORATION_STATUS.md`：当前状态和同门协作入口。
+- `experiments/`：实验配置、审计和小型结果摘要。
+- `refine-logs/`：执行跟踪和命令回执摘要。
+- `external/`：公开方法源码说明和许可证信息。
+- `PaddleSeg-release-2.8/`：必要的轻量源码/配置；大型数据和权重由 `.gitignore` 排除。
 
-The exact server paths and checkpoint locations in the reports are historical run references; they are not required repository paths.
+## 重要限制
 
-## Excluded from Git
+当前 Crack500 裁块清单存在源帧跨集合的同源相关风险；正式论文需要补充 source-frame-disjoint split。所有测试结果必须在验证集冻结模型、阈值和输入尺寸之后取得。未经同协议、多随机种子复核，不把任何结果写成 SOTA。
 
-Raw datasets and images, model checkpoints and pretrained weights, local Python environments, caches, generated outputs, large archives, and credentials are excluded by `.gitignore`.
-
-## Collaboration notes
-
-Please update the relevant experiment tracker and report when adding a run. Keep the dataset split, random seed, input size, iteration budget, and evaluation script explicit so results remain comparable.

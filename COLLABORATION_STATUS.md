@@ -1,35 +1,32 @@
-# Collaboration status
+# 协作状态
 
-This branch is the lightweight, reviewable GitHub snapshot of the pavement crack repair robot project. It is intentionally separate from the original `main` history, whose initial commit contains local datasets, environments, checkpoints, and generated artifacts.
+更新时间：2026-09-23  
+主工作区：`D:\论文复现`  
+GitHub 同步目录：`D:\github\1`  
+服务器工程：`/hy-tmp/crack_project`
 
-## Research question
+## 已完成
 
-The project combines pixel-level pavement crack segmentation with a mobile repair robot: the four-wheel differential-drive chassis performs coarse crack following, then the camera and three-DOF Cartesian repair platform perform calibrated fine positioning and repair.
+- 固定 BiSeNetV2+CE 为工程消融基线。
+- 在服务器统一核验 BiSeNetV2、OHEM+Dice+EMA、PP-LiteSeg、OCRNet、DeepLabV3P、SegFormer-B0 和 PIDNet-S 的测试日志。
+- 完成 BiSeNetV2 的 OHEM、Dice、Focal、Lovasz、EMA、增强和多个失败模块的筛选记录。
+- 确认当前已核验测试最高为 OCRNet-HRNet-W18，mIoU 0.7760；当前 BiSeNetV2 最佳候选 mIoU 0.7694。
 
-## Verified segmentation results
+## 进行中
 
-All values below are copied from the current reports and use the Crack500 test split of 1,124 images under the recorded PaddleSeg evaluation protocol.
+- SCSegamba 官方实现：服务器 `scsegamba` 环境，验证集选权重训练 50 epochs；当前已完成到 epoch 12。中途 checkpoint9 在原始 test 上统一固定阈值 mIoU 0.758827；正式排名仍待训练结束后验证集选权重。
+- 训练完成后必须用原始 test 1124 独立评估，不能把官方脚本每轮验证当成最终 test。
 
-| Model | Test mIoU | Crack IoU | Precision | Recall | F1 | Role |
-|---|---:|---:|---:|---:|---:|---|
-| BiSeNetV2 + CE | 0.7606 | 0.5545 | 0.7146 | 0.7122 | 0.7134 | Main baseline |
-| SegFormer-B0 | 0.7570 | 0.5466 | 0.7388 | 0.6776 | 0.7069 | Public comparison |
-| PIDNet-S | 0.5005 | 0.0547 | 0.8036 | 0.0554 | 0.1036 | Public comparison |
-| PP-LiteSeg-STDC1 | 0.7661 | 0.5634 | 0.7527 | 0.6915 | 0.7219 | Public comparison |
-| DeepLabV3P-ResNet50_vd | 0.7257 | 0.4955 | 0.5995 | 0.7406 | 0.6619 | Public comparison |
-| OCRNet-HRNet-W18 | 0.7760 | 0.5819 | 0.7601 | 0.7128 | 0.7356 | Current public comparison upper bound |
-| BiSeNetV2 + OHEM + Dice + EMA | 0.7694 | 0.5705 | 0.7296 | 0.7233 | 0.7264 | Best BiSeNetV2 ablation |
+## 阻塞与限制
 
-The optimized BiSeNetV2 is currently below OCRNet-HRNet-W18 by 0.0066 mIoU. Do not claim public SOTA until a future run exceeds the same reference under a matched protocol.
+- MixerCSeg selective-scan 官方扩展编译失败：服务器 nvcc 12.4，PyTorch 2.1.0+cu118。
+- Crack500 裁块的源帧编号跨集合存在同源相关风险，尚未建立 source-frame-disjoint split。
+- 当前没有 SOTA 结论；论文报告值与本项目固定 split 不可直接排名。
 
-## What to run next
+## 协作规则
 
-1. Recreate the PaddlePaddle/PaddleSeg environment on the target machine.
-2. Download Crack500 separately and keep it outside this repository.
-3. Reproduce the public-model comparison from the YAML files and the experiment report.
-4. Continue BiSeNetV2 ablations only with documented, mature PaddleSeg components.
-5. Add robot-side calibration, centerline extraction, chassis tracking, three-DOF positioning, and repair metrics after the vision protocol is fixed.
+1. 训练只在服务器执行。
+2. 代码、配置、报告和小型结果摘要可以同步；数据集、权重、环境、密钥和大型日志禁止上传。
+3. 新实验必须记录命令、配置、训练/验证/测试划分、随机种子和真实日志路径。
+4. 测试集只在方案冻结后使用一次；未经复核的结果标为待核验，不写成 SOTA。
 
-## Data and artifact policy
-
-The branch contains source, configs, logs, Markdown reports, split-list metadata, and diagrams. It excludes raw images and masks, local environments, checkpoints, pretrained weights, generated images/videos, caches, archives, and credentials. Use Git LFS or a separate artifact store if the team later decides to share weights.
