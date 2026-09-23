@@ -1,6 +1,6 @@
 # 协作状态
 
-更新时间：2026-09-23  
+更新时间：2026-09-23
 主工作区：`D:\论文复现`  
 GitHub 同步目录：`D:\github\1`  
 服务器工程：`/hy-tmp/crack_project`
@@ -14,7 +14,7 @@ GitHub 同步目录：`D:\github\1`
 
 ## 进行中
 
-- SCSegamba 官方实现：服务器 `scsegamba` 环境，验证集选权重训练 50 epochs；当前已完成到 epoch 12。中途 checkpoint9 在原始 test 上统一固定阈值 mIoU 0.758827；正式排名仍待训练结束后验证集选权重。
+- SCSegamba 官方实现：服务器 `scsegamba` 环境，验证集选权重训练 50 epochs；实时回执已完成 epoch 16、epoch 17 已开始。官方验证口径当前最高为 epoch 14 的 0.798882；正式排名仍待训练结束后用统一协议选权重并评估原始 test。
 - 训练完成后必须用原始 test 1124 独立评估，不能把官方脚本每轮验证当成最终 test。
 
 ## 阻塞与限制

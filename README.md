@@ -9,7 +9,7 @@
 - 已核验测试最高模型：**OCRNet-HRNet-W18，mIoU 0.7760**。
 - BiSeNetV2+OHEM+Dice+EMA：mIoU **0.7694**。
 - 当前没有 SOTA 证据；公开论文数字因划分和协议不同，不能直接排名。
-- SCSegamba 官方训练正在服务器运行；中途 checkpoint9 的统一 test mIoU 为 0.758827，尚未超过 OCRNet 或 BiSeNetV2 最佳消融；MixerCSeg 暂受 CUDA 扩展编译环境阻塞。
+- SCSegamba 官方训练仍在服务器运行；实时回执已完成 epoch 16、epoch 17 已开始，官方验证口径当前最高为 epoch 14 的 0.798882。正式统一 test JSON 尚未生成，不能纳入最终排名；MixerCSeg 暂受 CUDA 扩展编译环境阻塞。
 
 ## 已核验测试表
 
