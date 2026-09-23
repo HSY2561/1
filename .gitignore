@@ -1,0 +1,85 @@
+# Local environments and package caches
+envs/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.so
+*.dll
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Datasets and raw images
+data/
+dataset/*/JPEGImages/
+dataset/*/masks_bin/
+datasets/
+external/**/data/
+external/**/dataset/
+external/**/datasets/
+external/**/samples/
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tif
+*.tiff
+*.gif
+*.mp4
+*.avi
+
+# Model checkpoints and exported artifacts
+*.pdparams
+*.pdopt
+*.pdstates
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.engine
+*.safetensors
+checkpoints/
+weights/
+pretrained_models/
+runs/
+outputs/
+output/
+
+# Experiment scratch and generated temporary files
+tmp/
+_tmp/
+*_tmp/
+*.cache
+*.lock
+*.log.bak
+
+# Archives and large reference binaries
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.mat
+*.npy
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*secret*
+*credential*
+*password*
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Nested repositories are not vendored into this collaboration branch
+**/.git/
+
+# Optional legacy detector checkout (kept local, not vendored)
+external/pavement-crack-detection/
